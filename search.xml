@@ -1,58 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title><![CDATA[Gitalk 的使用]]></title>
-    <url>%2F2018%2F12%2F06%2FGitalk%2F</url>
-    <content type="text"><![CDATA[由于我比较笨还英文不好，所以按照 Gitalk 提供的文档给 Hexo 添加评论功能，简直就是不能行！各种报错后，翻看 Issues、Google、百度… 用了一天时间终于 Gitalk 可用了。这里我分享一下我的添加过程与报错问题的解决方法，供参考借鉴！ 添加过程申请 GitHub Application如果有的话在 Github 中 settings / Developer settings 选择一个 OAuth App，如果没有 点击这里申请，我是第一次使用，自然需要从申请开始。 说明一下： Application name: 没有限制的 APP 名称，比如：Hexo-application Homepage URL: 网站的主页，我理解就是根目录，比如：https://zhwangart.github.io Application description: 描述，非必填，我当时没有写。 Authorization callback URL: 回调 url 我理解就是网站的域名，比如：https://zhwangart.github.io 然后申请成功后，就看到有了 Client ID 与 Client Secret 的一个页面，页面下边就是申请刚填写的的信息，均可以再次编辑！ 只有 Client ID 与 Client Secret 是在配置 Hexo 的时候需要用。 看见好多网友做截图时候把 Client ID 与 Client Secret 打码，我有一种木有必要的感觉… 在 Hexo 中引入 Gitalk这个看 Gitalk 里面的引入方法就可以了，如果你使用 Ocean 的话，那么忽略这里！ 12&lt;link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"&gt;&lt;script src="https://unpkg.com/gitalk/dist/gitalk.min.js"&gt;&lt;/script&gt; 创建一个仓库在 GitHub 中 创建一个仓库用来存放评论，因为 Gitalk 的评论其实是在 GitHub 仓库自动创建 Issue 用法这个一定要仔细，不管是创建一个 comment.ejs 或者 gitalk.ejs 模板文件，还是直接在 post.ejs 模板页中写入，用法都是一样的。因为 Gitalk 是在文章的最底部出现，所以我不选择在 head 中引入 css 与 js ，当然这么做可能不是很规范。 因为主题 Ocean 是用 ejs 写的，所以 ejs 为例，创建一个 gitalk.ejs 代码如下 123456789101112131415161718&lt;% if (theme.gitalk.enable) &#123; %&gt; // 这里判断主题是否开启评论 &lt;div id="gitalk-container"&gt;&lt;/div&gt; // 盛放 Gitalk 的容器 &lt;%- css('https://unpkg.com/gitalk/dist/gitalk.css') %&gt; &lt;%- js('https://unpkg.com/gitalk/dist/gitalk.min.js') %&gt; &lt;script type="text/javascript"&gt; var gitalk = new Gitalk(&#123; clientID: '&lt;%- theme.gitalk.clientID %&gt;', // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一" clientSecret: '&lt;%- theme.gitalk.clientSecret %&gt;', repo: '&lt;%- theme.gitalk.repo %&gt;', owner: '&lt;%- theme.gitalk.owner %&gt;', admin: ['&lt;%- theme.gitalk.admin %&gt;'], id: location.pathname, // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二" distractionFreeMode: false // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置 &#125;) gitalk.render('gitalk-container') &lt;/script&gt;&lt;% &#125; %&gt; 在 article.ejs（模板页名称因主题而异）中 include gitalk.ejs 因为我只需要在 post 中加入评论功能其他页面不需要所以做了 post 判断！ 123&lt;% if (is_post()) &#123; %&gt; &lt;%- partial('post/gitalk') %&gt;&lt;%&#125; %&gt; 然后在主题 config.yml 中添加配置参数，注意 repo 只需要写名称。 12345678# Gitalkgitalk: enable: true clientID: b056dd67656dd67522d6 # 换成你申请 GitHub Application 网页上对应的 Client ID 与 Client Secret 参数 clientSecret: 05c56dd6736f12ac156dd6711956dd67e156dd67 # 同上 repo: gialk # 换成你创建的仓库，首先确保该仓库已经创建，其次只需要写名称，比如 "gialk"，否则 "问题三" owner: # 你的 Github ID admin: # 你的 Github ID 就可以，官方注释（Facebook-like distraction free mode）说明还可以添加其他有权限的人 报错与解决方案问题一 未找到相关的 Issues 进行评论 请联系 @xxxxxx 初始化创建。 这个问题分为两种情况： 确实是没有初始化创建，那么点击 “使用 Github 登录” 一次就好了！ 点击 “使用 Github 登录” 跳转到了 404 页面，那么就很有可能是 Client ID 与 Client Secret 的参数没传过来，右键检查页面是否有参数，如果为空的话，检查 ClientID（注意 Client 首字母大小写） 与 ClientSecret 这两个字段是否与 config.yml 中的一致。 问题二 Error: Validation Failed. 在 Gitalk 的 Issues 找到原因：文章的 URL 过长，生成 issue 时超过了 Label 的长度限制，这的注释也写的很明确：id: location.pathname, // Ensure uniqueness and length less than 50 。有两种解决方案： 按照 Ensure uniqueness and length less than 50 要求，精简文章名称，避免使用中文，缩短 URL… 文章名经 URL 编码后转 MD5 JavaScript-MD5。 123456// 引入 JavaScript-MD5&lt;%- js('https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js') %&gt;id: location.pathname, // Ensure uniqueness and length less than 50// 改为：id: md5(location.pathname), 问题三 Error: Not Found. 很简单就是 repo 写错了！这里只需要写仓库名称，不要链接！]]></content>
-      <tags>
-        <tag>hexo</tag>
-        <tag>Github</tag>
-        <tag>Gitalk</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[Ocean 中文说明]]></title>
-    <url>%2F2018%2F11%2F30%2FOcean%2F</url>
-    <content type="text"><![CDATA[Ocean 是基于 Hexo 默认主题 landscape 的功能，设计的一款支持移动设备的主题。 由于我是一枚 Designer 而不是 Coder，所以 Ocean 的代码可能并不完美，希望得到大家的指正！ 下载 Ocean 感谢 youchen1992 在 Ocean 制作过程中提供技术支持； MeggeryWang、XantheXuan 提供的英文翻译。 安装1$ git clone https://github.com/zhwangart/hexo-theme-ocean.git themes/ocean 启用目录 theme 中 _config.yml 选择 theme: ocean 1theme: ocean 更新12$ cd themes/ocean$ git pull 配置默认开启相册与关于菜单 1234567891011121314151617181920212223242526272829# Menumenu: 主页: / 归档: /archives 相册: /gallery 关于: /aboutrss: /atom.xml# Miscellaneousfavicon: /favicon.icobrand: /images/shark.svg# Ocean Video# Because I put videos in multiple formats on the same path, I just labeled the path here.ocean_video_poster: video poster path # Optional,Used for display before video loadingocean_video_src: video src path # Video format mp4/ogg/webmocean_video_brand: /images/hexo-inverted.svg # Optional# Contentexcerpt_link: Read More...nav_prev_text: Newer postsnav_next_text: Olde postsshare_text: Share# fancyboxfancybox: true# Local searchsearch_text: Search Ocean 使用了 feathericon 图标库，菜单中的图标定义在“CSS source / css / _partial / navbar.styl”中，可根据需要进行更改或添加。如果你不需要开启相册与关于菜单，需要删除或者注销掉他们的图标，如下边的示例： 1234567891011121314151617.nav-item &amp;:nth-child(1) // home .nav-item-link &amp;::before content '\f12f' &amp;:nth-child(2) // archives .nav-item-link &amp;::before content '\f12a' //&amp;:nth-child(3) // gallery // .nav-item-link // &amp;::before // content '\f1a9' //&amp;:nth-child(4) // about // .nav-item-link // &amp;::before // content '\f174' 文章封面图需要写在 markdown 的 head 部分 12345title: Post namephotos: [ ["img_url"], ["img_url"] ] 需要注意的是，这里说的封面图并不是文章配图，文章配图按照 markdown 的语法写就好了！ 相册首先需要创建一个 page ，关于页面也一样需要创建。 1$ hexo new page gallery 然后在编辑 markdown 的时候需要写在 head 部分，这种写法可能不是特别特别的好，希望能有更好的方法。 123456title: Galleryalbums: [ ["img_url","img_caption"], ["img_url","img_caption"] ]---]]></content>
-      <tags>
-        <tag>Ocean</tag>
-        <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[iterm2 快捷键]]></title>
-    <url>%2F2018%2F10%2F23%2Fiterm2-%E5%BF%AB%E6%8D%B7%E9%94%AE%2F</url>
-    <content type="text"><![CDATA[在开发中我们肯定经常使用终端命令行，然而 Mac 自带的终端好像并不是那么好用，所以出现了 iterm 这个软件，这篇文章总结了 iterm 的快捷键，希望对大家有帮助。 光标控制 ctrl + a: 到行首 ctrl + e: 行末 ctrl + f/b: 前进后退，相当于左右方向键，但是显然比移开手按方向键更快 ctrl + p: 上一条命令，相当于方向键上 ctrl + r: 搜索命令历史，这个大家都应该很熟悉了 ctrl + d: 删除当前字符 ctrl + h: 删除之前的字符 ctrl + w: 删除光标前的单词 ctrl + k: 删除到文本末尾 ctrl + t: 交换光标处文本 ⌘ + —/+/0: 调整字体大小 ⌘ + r:清屏，其实是滚到新的一屏，并没有清空。ctrl + l 也可以做到。 窗口操作 新建窗口：shift + command + d（横向）command + d（竖向） 关闭窗口：shift + command + w 前一个窗口：command + ` 后一个窗口：command + ~ 进入窗口 1,2,3：option + command + 编号 标签页操作 新建标签页: Command + T 关闭标签页: Command + W 前一个标签页: Command + 左方向键，Shift + Command + [ 后一个标签页: Command + 右方向键，Shitf + Command + ] 进入标签页1，2，3…: Command + 标签页编号 Expose 标签页: Option + Command + E（将标签页打撒到全屏，并可以全局搜索所有的标签页） 面板操作垂直分割: Command + D 水平分割: Shift + Command + D 前一个面板: Command + [ 后一个面板: Command + ] 切换到上/下/左/右面板: Option + Command + 上下左右方向键 其他功能 支持自定义全局快捷键用于显示和隐藏 iTerm2 Preference -&gt; Keys －&gt; Show/hide iTerm2 with a system-wide hotkey 打上勾之后 进入和退出全屏: Command + Enter 查看当前终端中光标的位置: Command + / 命令自动补全: Command + ;（很少用这个，还是感觉Zsh的补全更好用） 开启和关闭背景半透明: Command + u 清屏（重置当前终端）: Command + r 位置书签在当前会话中按 Command + Shift + m 可以保存当前位置，之后可以按 Command + Shift + j 跳回这个位置。 粘贴历史使用 Command + Shift + h 可以呼出粘贴历史，支持模糊检索。还可以设置将粘贴历史保存在磁盘上（Preferences -&gt; General） 即时回放使用 Command + Opt + b 打开即时回放，按Esc退出。即时回放可以记录终端输出的状态，让你“穿越时间”查看终端内容。默认每个会话最多储存 4MB 的内容，可以在设置中更改（Preferences -&gt; Genernal -&gt; Instant Replay）。]]></content>
-      <tags>
-        <tag>iterm</tag>
-        <tag>iterm2</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[在 Mac 环境编辑 Apache 根目录]]></title>
-    <url>%2F2018%2F09%2F26%2FMac-Apache-root%2F</url>
-    <content type="text"><![CDATA[Apache 的配置文件，在目录 /etc/apache2/ 下，打开 Finder，选择“前往”–“前往文件夹”，输入 /etc/apache2/ httpd.conf1、在 /etc/apache2/ 中找到 httpd.conf 文件打开，我选择用 Sublime Text，然后找到： 1234&lt;Directory /&gt; AllowOverride none Require all denied&lt;/Directory&gt; 修改为： 1234&lt;Directory /&gt; AllowOverride none Require all granted&lt;/Directory&gt; 2、开启虚拟主机配置功能，搜索： 1#Include /private/etc/apache2/extra/httpd-vhosts.conf 把前边的注释 # 号去掉，修改为： 1Include /private/etc/apache2/extra/httpd-vhosts.conf 说明：这个目录不用更改12DocumentRoot "/Library/WebServer/Documents"&lt;Directory "/Library/WebServer/Documents"&gt; httpd-vhosts.conf1、在 /etc/apache2/extra/ 中找到 httpd-vhosts.conf 文件打开，依然选择 Sublime Text，然后看到该文件默认开启了两个作为例子的虚拟主机： 123456789101112131415&lt;VirtualHost *:80&gt; ServerAdmin webmaster@dummy-host.example.com DocumentRoot "/usr/docs/dummy-host.example.com" ServerName dummy-host.example.com ErrorLog "/private/var/log/apache2/dummy-host.example.com-error_log" CustomLog "/private/var/log/apache2/dummy-host.example.com-access_log" common&lt;/VirtualHost&gt; &lt;VirtualHost *:80&gt; ServerAdmin webmaster@dummy-host2.example.com DocumentRoot "/usr/docs/dummy-host2.example.com" ServerName dummy-host2.example.com ErrorLog "/private/var/log/apache2/dummy-host2.example.com-error_log" CustomLog "/private/var/log/apache2/dummy-host2.example.com-access_log" common&lt;/VirtualHost&gt; 而实际上，这两个虚拟主机是不存在的，在没有配置任何其他虚拟主机时，可能会导致访问localhost时出现如下提示： Forbidden You don’t have permission to access /index.php on this server 最简单的办法就是在它们每行前面加上 # ，注释掉就好了，这样既能参考又不导致其他问题。 2、增加如下配置 12345678&lt;VirtualHost *:80&gt; ServerAdmin zhwangart@aliyun.com DocumentRoot "/Users/zhwangart/wwwroot" ServerName Localhost ServerAlias local ErrorLog "/private/var/log/apache2/dummy-host.example.com-error_log" CustomLog "/private/var/log/apache2/dummy-host.example.com-access_log" common&lt;/VirtualHost&gt; 保存退出，并重启 Apache 1sudo apachectl restart 3、运行“sudo vi /etc/hosts”，打开hosts配置文件，加入”127.0.0.1 mysites”，这样就可以配置完成sites虚拟主机了，可以访问“http://mysites”了，在10.8之前Mac OS X版本其内容和“http://localhost/~[用户名]”完全一致。 4、注意，记录log的“ErrorLog “/private/var/log/apache2/sites-error_log””也可以删掉，但记录日志其实是一个好习惯，在出现问题时可以帮助我们判断。如果保留这些log代码，一定log文件路径都是存在的，如果随便修改一个不存在的，会导致Apache无法服务而没有错误提示，这个比较恶心。]]></content>
-      <tags>
-        <tag>apache</tag>
-        <tag>Mac OS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[在 Mac 下配置 php 开发环境：Apache+php+MySql]]></title>
-    <url>%2F2018%2F09%2F26%2F%E5%9C%A8Mac%E4%B8%8B%E9%85%8D%E7%BD%AEphp%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%EF%BC%9AApache-php-MySql%2F</url>
-    <content type="text"><![CDATA[系统 OS X 10.8.5，Apache 是 Mac 自带的，主要是 PHP 的配置和 MySql 的配置，网上教程也挺多，本人也有参考，但是感觉有些步骤执行起来不是很顺畅，根据自己配置的过程整理。 一、启动Apache有两种方法 打开网络共享：“系统偏好设置”–“共享”，在“互联网共享”那一项前面打“√”。 打开终端，输入 1sudo apachectl start 这时需要输入密码，输入电脑密码即可，然后输入 1apachectl －v 可以查看到 Apache 的版本信息 12Server version: Apache/2.4.34 (Unix)Server built: Aug 17 2018 16:29:43 此时在浏览器中输入 http://localhost，会出现 It works！ 的页面。 二、运行PHP1、找到 Apache 的配置文件，在目录 /etc/apache2/ 下，打开 Finder，选择“前往”–“前往文件夹”，输入 /etc/apache2/，找到其中的 httpd.conf 文件，选择用文稿打开进行编辑，点按 Command+F，搜索 #LoadModule php 能看到： 1#LoadModule php7_module libexec/apache2/libphp7.so 把前边的注释 # 号去掉，然后保存，如果出现文本锁定，无法解锁的情况，解决办法有两种： 选中该文件，右击后选择“显示简介”，点击右下角的小锁的图标，输入电脑密码解锁，然后选择左边的 + 号键，选择自己当前电脑登陆的用户，将权限设置为读与写，如果还是不行，将其上一级文件夹权限同样再修改一次。 将该文件复制到桌面，进行修改，修改后再复制到原来的文件夹替换之前的文件即可。 2、重启 Apache，在终端输入 1sudo apachectl restart PHP就可以用了。 3、在终端输入 1sudo cp /Library/WebServer/Documents/index.html.en /Library/WebServer/Documents/info.php 即在 Apache 的根目录下复制 index.html.en文件并重命名为 info.php。 4、打开 info.php，在 It works 后面加上 ，然后再次重启 Apache，在浏览器中输入 http://localhost/info.php，会出现一个显示 PHP 信息的页面，如图所示。 三、配置 MySql1、在 http://dev.mysql.com/downloads/mysql/ 网站上，选择 Mac OS X 平台，然后选择图中的下载，我开始下载错了，安装出错，后来下载图中的版本安装成功。 双击第一个安装，然后双击第三个安装，然后双击第二个，第二个是配置文件，安装之后，可以在系统偏好设置中选择启动或者关闭 MySql。 2、修改密码 在终端输入，这里修改密码为 12345，也可为其他，自定义即可 1/usr/local/mysql/bin/mysqladmin -u root password 12345 四、使用 phpMyAdminphpMyAdmin 是用 PHP 开发的管理 MySql 的程序，非常实用。 1、下载 phpMyAdmin，在网址 http://www.phpmyadmin.net/home_page/downloads.php 中选择合适的版本下载，我选择的是 phpMyAdmin-4.0.8-All-Languages.tar.bz2 2、将下载好的文件解压后，放进 /Library/WebServer/Documents/ 文件夹中，并命名为 phpMyadmin。 3、复制 /Library/WebServer/Documents/phpmyadmin 中的 config.sample.inc.php，并命名为 config.inc.php ，并放在当前文件夹下。 4、编辑 config.inc.php ，修改其中的1$cfg['Servers']]$i]['host'] = 'localhost'; 为1$cfg['Servers']]$i]['host'] = '127.0.0.1'; 即可，如果想要无密码登陆，则将其中的下面语句中的 false 改成 true。1$cfg['Servers'][$i]['AllowNoPassword'] = false 5、在浏览器中输入 http://localhost/phpmyadmin，输入用户名 root, 和刚刚自己所更改的密码，如果未更改密码，则按照上一步骤中的无密码操作，然后就可以直接登陆了。 PS：到此配置完成，进行 PHP 开发还需下载一个 PHP 开发工具，Mac 下的 PHP 开发工具也挺多，大家自行谷歌百度，需要提醒的是，安装好开发工具之后，在建议 PHP 工程时，记得要将工程放在和 phpMyadmin 同一个目录文件下，可新建一个文件夹专门用来存放 PHP 工程，否则，是无法运行的。]]></content>
-      <tags>
-        <tag>php</tag>
-        <tag>apache</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[img 下多余空隙解决方案]]></title>
-    <url>%2F2018%2F09%2F12%2Fimg-%E4%B8%8B%E5%A4%9A%E4%BD%99%E7%A9%BA%E7%99%BD%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%2F</url>
-    <content type="text"><![CDATA[在进行页面的 CSS 排版时，遇到 IE6（当然有时 Firefox 下也会偶遇）浏览器中的图片元素 img 下出现多余空隙的问题绝对是常见的。对于该问题的解决方法也是「见机行事」，根据原因的不同要用不同的解决方法，这里把解决 img 下边多余空隙 Bug 的常用方法归纳，供大家参考。 假如 Html 结构如下所示，img 的父级元素为 figure：123&lt;div class="figure"&gt; &lt;img src="..." alt="..."/&gt;&lt;/div&gt; 1、将图片转换为块级对像即设置 img 的 display 为：block，示例 CSS 代码：1.figure img &#123; display: block;&#125; 2、设置图片的垂直对齐方式即设置图片的 vertical-align 属性为：top、text-top、bottom、text-bottom，示例 CSS 代码：1.figure img &#123; vertical-align: top;&#125; 3、设置父级对象的文字大小为 0即设置 figure 的 font-size 属性为: 0， 可以解决问题，但这也引发了新的问题，在父对像中的文字都无法显示。就算文字部分被子对像括起来，重置子对像文字大小依然可以显示，但在 CSS 效验的时候会提示文字过小的错误。示例 CSS 代码：1.figure &#123; font-size: 0;&#125; 4、改变父级对象的属性如果父级对象的宽、高固定，img 自适应父级对像大小，那么可以设置：overflow:hidden; 来解决。如本例中可以向#sub中添加以下代码：12345.figure &#123; width: 100px; height: 100px; overflow: hidden;&#125; 5、设置 img 的浮动属性给 img 设置 float 属性为：left、right，示例 CSS 代码：1img &#123; float: left;&#125; 如果要实现图文混排，这种方法是很好的选择。 6、取消 img 标签和其父级对象的最后一个结束标签之间的空格这个方法要强调下，在实际开发中该方法可能会出乱子，因为在写代码的时候为了让代码更体现语义和层次清晰，难免要通过 IDE 提供代码缩进显示，这必然 会让标签和其他标签换行显示，比如说 Dreamweaver 的“套用源格式”命令。所以说这个方法可以供我们了解出现 Bug 的一种情况，具体解决方案的还得各位见招拆招了。]]></content>
-      <tags>
-        <tag>CSS</tag>
-        <tag>Html</tag>
-      </tags>
-  </entry>
+<search> 
+  
+    
+    <entry>
+      <title>hello-Hexo</title>
+      <link href="/2018/12/07/hello-Hexo/"/>
+      <url>/2018/12/07/hello-Hexo/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2018/12/07/hello-world/"/>
+      <url>/2018/12/07/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class=" language-bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class=" language-bash"><code class="language-bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class=" language-bash"><code class="language-bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class=" language-bash"><code class="language-bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+  
+  
 </search>
