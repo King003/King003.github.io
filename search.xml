@@ -3,6 +3,17 @@
   
     
     <entry>
+      <title>图片测试</title>
+      <link href="/2018/12/22/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/"/>
+      <url>/2018/12/22/%E5%9B%BE%E7%89%87%E6%B5%8B%E8%AF%95/</url>
+      
+        <content type="html"><![CDATA[<p>测试：图片在哪里？</p><p><img src="/2018/12/22/图片测试/1.jpg" alt=""></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    <entry>
       <title>hello-Hexo</title>
       <link href="/2018/12/07/hello-Hexo/"/>
       <url>/2018/12/07/hello-Hexo/</url>
