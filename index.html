@@ -116,6 +116,180 @@
 <p>定义语法：$变量名=变量值;</p>
 <p>延时案例：</p>
 <p><img src="/2018/12/22/php基础快速入门/./1.png" alt=""></p>
+<h3 id="变量名的命名规则"><a href="#变量名的命名规则" class="headerlink" title="变量名的命名规则"></a>变量名的命名规则</h3><p><strong>规则</strong>： 只能是由字母、数字、下划线组成的字符，并且不能以数字开头。</p>
+<p><strong>演示案例：</strong></p>
+<p><img src="/2018/12/22/php基础快速入门/1545554443241.png" alt=""></p>
+<h3 id="变量的基本使用"><a href="#变量的基本使用" class="headerlink" title="变量的基本使用"></a>变量的基本使用</h3><h4 id="设置操作（增删改）"><a href="#设置操作（增删改）" class="headerlink" title="设置操作（增删改）"></a>设置操作（增删改）</h4><p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545554575937.png" alt=""></p>
+<h4 id="查询操作"><a href="#查询操作" class="headerlink" title="查询操作"></a>查询操作</h4><p><strong>演示案例：</strong></p>
+<p><img src="/2018/12/22/php基础快速入门/1545554656382.png" alt=""></p>
+<h4 id="赋值的概念"><a href="#赋值的概念" class="headerlink" title="赋值的概念"></a>赋值的概念</h4><p>在PHP中，通过等号“<strong>=</strong>”将一个值给到另外一个变量的过程，被称为“赋值”。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545554815474.png" alt=""></p>
+<h3 id="PHP代码嵌入HTML中的注释问题"><a href="#PHP代码嵌入HTML中的注释问题" class="headerlink" title="PHP代码嵌入HTML中的注释问题"></a>PHP代码嵌入HTML中的注释问题</h3><p><strong>需求1</strong>：实现将PHP代码嵌入HTML代码中，查看效果。</p>
+<p><strong>解答1</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545554992704.png" alt=""></p>
+<p><strong>需求2</strong>：实现将PHP代码嵌入HTML代码中的注释中，查看效果。</p>
+<p><strong>解答2</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555035219.png" alt=""></p>
+<p><strong>小结</strong>：通过以上两个例子，我们了解到：</p>
+<ol>
+<li>PHP的代码是可以被嵌入HTML内容中的；</li>
+<li>PHP的内容即便嵌入HTML的注释中，也一样会被解析执行，HTML的注释是控制不住PHP的内容；</li>
+</ol>
+<p><img src="/2018/12/22/php基础快速入门/1545555079451.png" alt=""></p>
+<h3 id="预定义变量"><a href="#预定义变量" class="headerlink" title="预定义变量"></a>预定义变量</h3><p>PHP中的预定义变量包括：1）九大超全局预定义数组变量；2）其他预定义变量 </p>
+<h4 id="九大超全局预定义数组变量"><a href="#九大超全局预定义数组变量" class="headerlink" title="九大超全局预定义数组变量"></a>九大超全局预定义数组变量</h4><p>包括以下九个成员：</p>
+<blockquote>
+<p>$_ENV</p>
+<p>$_SERVER</p>
+<p>​            以下三个将会在表单传值部分进行讲解</p>
+<p>$_GET</p>
+<p>$_POST</p>
+<p>$_REQUEST</p>
+<p>​            以下两个将会在会话技术部分进行将爱那个接</p>
+<p>$_COOKIE</p>
+<p>$_SESSION</p>
+<p>​            下面这个将会在文件上传部分进行讲解</p>
+<p>$_FILES</p>
+<p>​            下面这个将会在作用域部分进行讲解</p>
+<p>$GLOBALS</p>
+</blockquote>
+<h5 id="ENV"><a href="#ENV" class="headerlink" title="$_ENV"></a>$_ENV</h5><p>作用：获得程序所部署的环境相关信息。</p>
+<p>直接输出该变量将无法获取任何信息，需要先配置php.ini中的variables_order选项才能查看。</p>
+<p><strong>演示案例</strong>：</p>
+<ol>
+<li><p>打开php的配置文件php.ini，在variables_order选项中加上E，开启$_ENV的值，</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555464033.png" alt=""></p>
+</li>
+<li><p>访问输出$_ENV的程序文件，查看效果：</p>
+</li>
+</ol>
+<p><img src="/2018/12/22/php基础快速入门/1545555499297.png" alt=""></p>
+<h5 id="SERVER"><a href="#SERVER" class="headerlink" title="$_SERVER"></a>$_SERVER</h5><p>作用：获得与服务器交互的相关信息。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555528400.png" alt=""></p>
+<h4 id="其他预定义变量"><a href="#其他预定义变量" class="headerlink" title="其他预定义变量"></a>其他预定义变量</h4><p><strong>$argv</strong>和<strong>$argc</strong>变量</p>
+<p><strong>注意</strong>：这两个变量也是PHP实现预定义好了的，但是如果通过浏览器直接访问程序，是无法会的任何的信息的。</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555596886.png" alt=""></p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555645844.png" alt=""></p>
+<p><strong>小结</strong>：通过上面这个演示案例，我们观察到：</p>
+<p>$argv包含的是  执行程序文件时，传递给这个程序文件的 参数数据，$argv的第一条数据永远都是这个被执行的程序文件的全路径；</p>
+<p>$argc包含的是  $argv的数据  个数；</p>
+<h3 id="可变变量"><a href="#可变变量" class="headerlink" title="可变变量"></a>可变变量</h3><p><strong>概念</strong>：某个变量的变量名被另外一个变量的变量值所代替，这个变量就叫可变变量。 </p>
+<p><strong>演示案例：</strong></p>
+<p><img src="/2018/12/22/php基础快速入门/1545555718747.png" alt=""></p>
+<h3 id="变量的传值"><a href="#变量的传值" class="headerlink" title="变量的传值"></a>变量的传值</h3><p>变量的传值包括两个部分： 1）变量的值传递；2）变量的引用传递；</p>
+<h4 id="变量的值传递"><a href="#变量的值传递" class="headerlink" title="变量的值传递"></a>变量的值传递</h4><p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555788954.png" alt=""></p>
+<p>变量值传递的原理：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545555824954.png" alt=""></p>
+<p><strong>小结</strong>：所谓的变量值传递，指的是修改其中一个变量的值，并不影响另外一个变量的值。</p>
+<h2 id="2-常量"><a href="#2-常量" class="headerlink" title="2. 常量"></a>2. 常量</h2><p><strong>概念</strong>：常量也是程序中保存数据的载体，但是在<strong>整个程序脚本执行过程中只能定义一次</strong>。 </p>
+<h3 id="常量的定义语法"><a href="#常量的定义语法" class="headerlink" title="常量的定义语法"></a>常量的定义语法</h3><p>包括两种：1）通过const关键字定义；2）通过define函数进行定义；</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556077589.png" alt=""></p>
+<p><strong>需求1</strong>：在程序中同时定义两个同名的常量，查看效果。</p>
+<p><strong>解答1</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556204669.png" alt=""></p>
+<p><strong>需求2</strong>：在程序中定义一个常量，然后再次通过赋值的方式为常量赋值，查看效果。</p>
+<p><strong>解答2</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556257428.png" alt=""></p>
+<p><strong>小结</strong>：</p>
+<ol>
+<li>常量在程序中只能定义一次，之后就不能进行修改了。</li>
+</ol>
+<h3 id="数组常量"><a href="#数组常量" class="headerlink" title="数组常量"></a>数组常量</h3><p>在php7之后，常量支持以数组的形式来进行定义。 </p>
+<p><strong>注意</strong>：该知识点有点超前，目前大家只需了解PHP7之后常量支持以数组的形式来进行定义即可。</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556487059.png" alt=""></p>
+<h3 id="常量的使用"><a href="#常量的使用" class="headerlink" title="常量的使用"></a>常量的使用</h3><p>分别完成如下需求操作：</p>
+<p><strong>需求1</strong>：在程序中定义一个常量，并且输出该常量的值，查看效果。</p>
+<p><strong>解答1</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556523247.png" alt=""></p>
+<p><strong>需求2</strong>：在程序中定义一个包含特殊字符的常量，并且尝试输出该常量的值，查看效果。</p>
+<p><strong>解答2</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556565242.png" alt=""></p>
+<p><strong>小结</strong>：</p>
+<ol>
+<li>如果常量名不包含特殊字符，则只需要像输出变量一样去输出常量即可；</li>
+<li>如果常量名包含该特殊字符，则需要使用PHP的内置函数constant来进行输出；</li>
+</ol>
+<h4 id="判断一个常量是否存在"><a href="#判断一个常量是否存在" class="headerlink" title="判断一个常量是否存在"></a>判断一个常量是否存在</h4><p>操作方法：通过defined函数来进行判断常量是否存在。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556656202.png" alt=""></p>
+<h4 id="获得程序中定义出来的所有常量操作"><a href="#获得程序中定义出来的所有常量操作" class="headerlink" title="获得程序中定义出来的所有常量操作"></a>获得程序中定义出来的所有常量操作</h4><p>操作方法：需要通过get_defined_constants函数获得当前程序脚本中所有的常量。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545556990473.png" alt=""></p>
+<h3 id="系统常量（预定义常量）"><a href="#系统常量（预定义常量）" class="headerlink" title="系统常量（预定义常量）"></a>系统常量（预定义常量）</h3><p>所谓的系统常量，其实就是PHP事先帮我们定义好的一些常量。（想了解去看一下手册）</p>
+<h3 id="魔术常量"><a href="#魔术常量" class="headerlink" title="魔术常量"></a>魔术常量</h3><p>魔术常量本质上不能算是严格意义上的常量，常量在脚本代码中是不允许被修改的，也就是值是固定的，但是魔术常量会随着在脚本代码中位置的变换，其值也会发生改变。（想了解去看一下手册）</p>
+<h2 id="3-数据类型"><a href="#3-数据类型" class="headerlink" title="3. 数据类型"></a>3. 数据类型</h2><h3 id="数据类型的分类"><a href="#数据类型的分类" class="headerlink" title="数据类型的分类"></a>数据类型的分类</h3><p>PHP中数据类型主要分为三个大类： 1）标量数据类型；2）复合数据类型；3）特殊数据类型；</p>
+<p>标量数据类型：a）整型（int）； b）浮点型（float）；c）字符串型（string）；d）布尔型（bool）；</p>
+<p>复合数据类型：a）数组（array）；b）对象（object）；</p>
+<p>特殊数据类型：a）资源类型（resource）；b）NULL类型；</p>
+<h3 id="整型（int）"><a href="#整型（int）" class="headerlink" title="整型（int）"></a>整型（int）</h3><p>含义：指的就是数学中的整数。英文全名：intval </p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token comment" spellcheck="true">//定义一个变量保存整型类型的的数据</span>
+<span class="token variable">$num1</span> <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>
+<span class="token function">var_dump</span><span class="token punctuation">(</span> <span class="token variable">$num1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="浮点型"><a href="#浮点型" class="headerlink" title="浮点型"></a>浮点型</h3><p>含义：相当于数学当中的小数，PHP语言默认浮点型就是双精度浮点型，占8个字节。</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token variable">$num1</span> <span class="token operator">=</span> <span class="token number">3.1415</span><span class="token punctuation">;</span>
+<span class="token function">var_dump</span><span class="token punctuation">(</span> <span class="token variable">$num1</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="浮点型数字比较问题"><a href="#浮点型数字比较问题" class="headerlink" title="浮点型数字比较问题"></a>浮点型数字比较问题</h4><p>TIPS：由于浮点型数据在计算机中转换为二进制进行存储时，可能会存在精度丢失的问题，故浮点型数据的比较时常会出现不准确的情况。请尽量规避使用浮点型数据进行比较。</p>
+<h3 id="布尔型"><a href="#布尔型" class="headerlink" title="布尔型"></a>布尔型</h3><p>TIPS：布尔值只有两个值，true代表真，false代表假。多用于比较之后得到的结果。</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token variable">$bool1</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token variable">$bool2</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token variable">$bool1</span><span class="token punctuation">,</span><span class="token variable">$bool2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="字符串型"><a href="#字符串型" class="headerlink" title="字符串型"></a>字符串型</h3><p>TIPS：在PHP中，被引号（单引号或双引号都可以）所包裹的内容就是字符串。</p>
+<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<span class="token variable">$str1</span> <span class="token operator">=</span> <span class="token string">'字符串型'</span><span class="token punctuation">;</span>
+<span class="token variable">$str2</span> <span class="token operator">=</span> <span class="token string">"字符串型"</span><span class="token punctuation">;</span>
+</code></pre>
+<h4 id="单引号与双引号包裹的区别"><a href="#单引号与双引号包裹的区别" class="headerlink" title="单引号与双引号包裹的区别"></a>单引号与双引号包裹的区别</h4><p>如果变量写在了由单引号定义的字符串中，则变量将不会被解析成对应的值；如果变量写在了由双引号定义的字符串中，则变量将会被解析成对应的值。</p>
+<h3 id="数组型"><a href="#数组型" class="headerlink" title="数组型"></a>数组型</h3><p>定义：数组即键值对的集合。</p>
+<p>数组的一组键值对也被称为数组的一个元素；数组元素的键也被称为数组元素的下标。</p>
+<p><strong>演示案例=</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/61.png" alt=""></p>
+<h4 id="数组元素的键"><a href="#数组元素的键" class="headerlink" title="数组元素的键"></a>数组元素的键</h4><p>TIPS：数组的元素的键只会是整型或者字符串型。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/62" alt=""></p>
+<p><strong>小结</strong>：</p>
+<p>虽然在PHP中，定义数组元素的下标，没有硬性规定一定要符合下标的要求来定义，但是我们最好在定义时，按照定义下标的要求来定义。</p>
+<h4 id="数组元素的值"><a href="#数组元素的值" class="headerlink" title="数组元素的值"></a>数组元素的值</h4><p>TIPS：数组元素的值可以是任意数据类型。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/63" alt=""></p>
+<h4 id="数组的两种定义方式"><a href="#数组的两种定义方式" class="headerlink" title="数组的两种定义方式"></a>数组的两种定义方式</h4><p>在PHP中，数组可以使用两种方式进行定义：1）array结构的方式；2）中括号”[]”结构的方式；</p>
+<h5 id="array结构"><a href="#array结构" class="headerlink" title="array结构"></a>array结构</h5><p>array结构又包含两种定义方法：1）指定元素下标定义法；2）不指定元素下标定义法</p>
+<p><strong>演示案例</strong>：指定元素下标定义法</p>
+<p><img src="/2018/12/22/php基础快速入门/64" alt=""></p>
+<p><strong>演示案例</strong>：不指定元素下标定义法</p>
+<p><img src="/2018/12/22/php基础快速入门/65" alt=""></p>
+<h5 id="中括号”-”结构"><a href="#中括号”-”结构" class="headerlink" title="中括号”[]”结构"></a>中括号”[]”结构</h5><p>中括号”[]”结构也包含两种定义方法：1）指定元素下标定义法；2）不指定元素下标定义法</p>
+<p><strong>演示案例</strong>：指定元素下标定义法</p>
+<p><img src="/2018/12/22/php基础快速入门/66" alt=""></p>
+<p><strong>演示案例</strong>：不指定元素下标定义法</p>
+<p><img src="/2018/12/22/php基础快速入门/67" alt=""></p>
+<h5 id="数组定义方式的总结"><a href="#数组定义方式的总结" class="headerlink" title="数组定义方式的总结"></a>数组定义方式的总结</h5><p>有两种定义方式：1)使用array结构的方式；2）使用中括号”[]”结构的方式；</p>
+<p>使用array结构：a）指定下标定义法；b）不指定下标定义法；</p>
+<p>使用中括号”[]”结构：a）指定下标定义法；b）不指定下标定义法；</p>
+<h4 id="数组的调用"><a href="#数组的调用" class="headerlink" title="数组的调用"></a>数组的调用</h4><p>数组的调用其实主要就是如何调取到数组元素的值。</p>
+<p><img src="/2018/12/22/php基础快速入门/68" alt=""></p>
+<h3 id="对象型"><a href="#对象型" class="headerlink" title="对象型"></a>对象型</h3><p>TIPS：对象和数组同属于复合数据类型，在PHP中，对象的数据结构和数组的数据结构非常的相似，我们把对象经常称为：有生命力的数组。</p>
+<p><strong>演示案例</strong>：使用系统类stdClass创建一个对象。</p>
+<p><img src="/2018/12/22/php基础快速入门/69" alt=""></p>
+<h3 id="资源型"><a href="#资源型" class="headerlink" title="资源型"></a>资源型</h3><p>TIPS：我们当前还没有学到文件相关操作，当前为了能够直观的观察到资源类型的形态，我们前置性的使用fopen函数在程序中打开一个文件。此处，只要求大家对资源类型有一个直观的认识即可。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/70" alt=""></p>
+<p><strong>小结</strong>：</p>
+<p>资源指的是内存当中的物理空间。</p>
+<h3 id="NULL"><a href="#NULL" class="headerlink" title="NULL"></a>NULL</h3><p>TIPS：NULL类型只有一个数据，就是NULL自己。表示空，即什么都没有的意思。</p>
+<p><strong>演示案例</strong>：</p>
+<p><img src="/2018/12/22/php基础快速入门/1545558616995.png" alt=""></p>
 
       
     </div>
