@@ -355,7 +355,7 @@
 <h3 id="strpos-strrpos函数"><a href="#strpos-strrpos函数" class="headerlink" title="strpos, strrpos函数"></a>strpos, strrpos函数</h3><p><img src="/2018/12/22/php基础快速入门/76" alt=""></p>
 <h3 id="str-replace函数"><a href="#str-replace函数" class="headerlink" title="str_replace函数"></a>str_replace函数</h3><p><img src="/2018/12/22/php基础快速入门/77" alt=""></p>
 <h3 id="printf-sprintf函数"><a href="#printf-sprintf函数" class="headerlink" title="printf, sprintf函数"></a>printf, sprintf函数</h3><p><img src="/2018/12/22/php基础快速入门/78" alt=""></p>
-<p><img src="/2018/12/22/php基础快速入门/../../../../Data/PHP/day6/doc/img/79" alt="1533629581378"></p>
+<p><img src="/2018/12/22/php基础快速入门/79" alt=""></p>
 <h3 id="echo-print-r，var-dump函数"><a href="#echo-print-r，var-dump函数" class="headerlink" title="echo, print_r，var_dump函数"></a>echo, print_r，var_dump函数</h3><p><img src="/2018/12/22/php基础快速入门/80" alt=""></p>
 <h3 id="str-repeat-str-shuffle函数"><a href="#str-repeat-str-shuffle函数" class="headerlink" title="str_repeat, str_shuffle函数"></a>str_repeat, str_shuffle函数</h3><p><img src="/2018/12/22/php基础快速入门/81" alt=""></p>
 <h2 id="5-字符串转义"><a href="#5-字符串转义" class="headerlink" title="5. 字符串转义"></a>5. 字符串转义</h2><p>转义符号：\</p>
@@ -449,6 +449,7 @@
     <div id="gitalk-container"></div>
     <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
     <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
     <script type="text/javascript">
         var gitalk = new Gitalk({
           clientID: '5525c00a9d0f53a490f2',  // 这里一定要注意主题 config.yml 中 clientID 的大小写，否则参数传不过来，对应下边的 "问题一"
@@ -456,7 +457,8 @@
           repo: 'gitalk',
           owner: 'King003',
           admin: ['King003'],
-          id: location.pathname,      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
+          id: md5(location.pathname),
+          // id: location.pathname,      // 保持默认，官方注释（Ensure uniqueness and length less than 50），文章 URL 不能太长 "问题二"
           distractionFreeMode: false  // 不喜欢评论时候的遮盖层所以选择 false ，而且我觉得这个也没有必要放在 config.yml 中配置
         })
   
